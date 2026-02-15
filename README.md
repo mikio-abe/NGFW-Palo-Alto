@@ -26,30 +26,8 @@ FGが自動処理していたunderlay/overlay分離を明示的に設定し、�
 
 ### Topology
 
-```
-                    +-------------------------------------+
-                    |        Internet                      |
-                    |   (WireGuard UDP 4960)               |
-                    +-------------------------------------+
-                              |               |
-                         Fixed LAN        USB Tethering
-                        (Aterm)           (iPhone)
-                      106.73.26.0         49.109.x.x
-                              |               |
-                        192.168.10.100   172.20.10.2
-                              |               |
-[Branch1]--PA-VM1--POP1===WireGuard===POP2--PA-VM2--[Branch2]
-  AS65100    |      |    10.255.0.x    |      |    AS65200
-             |    Cloudflare        Cloudflare |
-             |                                 |
-             +-------- MPLS (CE1-PE-CE2) ------+
-             |  IPSec tunnel.1: 10.254.1.x     |
-             |  BGP Local-Pref 200 (Primary)   |
-             |                                 |
-             +---- SASE (POP1-WG-POP2) -------+
-                IPSec tunnel.2: 10.255.2.x
-                BGP Local-Pref 100 (Backup)
-```
+<img width="850" alt="image" src="https://github.com/user-attachments/assets/272601b3-a1ac-4d9d-a0b3-55dc31d34e97" />
+
 
 ### Underlay (MPLS)
 
