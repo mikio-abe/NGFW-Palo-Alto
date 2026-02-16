@@ -2,6 +2,13 @@
 
 💡 This repository documents a hands-on lab replacing FortiGate SD-WAN with Palo Alto PA-VM firewalls in an existing MPLS + SASE dual-path topology. By removing FortiGate's automated SD-WAN abstraction and rebuilding the same failover behavior manually on PA-VM, every layer — underlay static routing, IPSec tunnel establishment, BGP overlay route exchange, and export policy loop prevention — must be explicitly configured. The goal is to expose the underlay/overlay separation that FortiGate hides behind its SD-WAN engine.
 
+**【日本語サマリ】**<br>
+既存のMPLS + SASEデュアルパス構成上で、FortiGate SD-WANをPalo Alto PA-VMに置き換えるハンズオンラボです。<br>
+FortiGateのSD-WAN自動化を外し、同じフェイルオーバー動作をPA-VM上で手動再構築しています。<br>
+underlay静的ルーティング、IPSecトンネル確立、BGPオーバーレイ経路交換、export policyによるループ防止まで全レイヤを明示的に設定しました。<br>
+目的は、FortiGateがSD-WANエンジンの裏で隠しているunderlay/overlay分離を可視化することです。
+
+
 ---
 
 ## 🔬 Overview
