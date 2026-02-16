@@ -20,6 +20,11 @@ FortiGate SD-WANをPalo Alto PA-VMに置き換え、IPSec VPN + BGP over IPSec�
 MPLS優先/SASEフェイルオーバーをlocal-preferenceで制御。<br>
 FGが自動処理していたunderlay/overlay分離を明示的に設定し、設計思想の違いを検証しました。
 
+> **Note:** PA-VM is an NGFW, not an SD-WAN appliance. Failover is triggered only by BGP peer down (link failure / blackout). Unlike FortiGate SD-WAN, which monitors SLA metrics (latency, jitter, packet loss) and triggers failover on quality degradation (brownout), PA-VM cannot detect path quality changes while the link remains up.
+
+> **【補足】** PA-VMはNGFWであり、SD-WANではない。フェイルオーバーはBGPピアダウン（回線断 / blackout）でのみ発生する。FortiGate SD-WANのようにSLAメトリクス（レイテンシ・ジッター・パケットロス）を監視して品質劣化（brownout）で切り替える機能はない。回線が生きている限り、品質が劣化してもパス切替は起きない。
+
+
 ---
 
 ## 🏗️ Architecture & IP Addressing
