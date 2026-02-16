@@ -197,6 +197,7 @@ FW: VPN Intrazone にApp-ID適用（bgp + pingのみ許可）。
 
 ---
 
+
 ## ✅ Verification Results
 
 ### 1. IPSec Tunnel Status
@@ -211,6 +212,8 @@ Gateway ID   Peer-Address    Gateway Name
 2            10.0.1.1        SASE-VPN-GW
 ```
 
+→ MPLS-VPN-GW / SASE-VPN-GW の2本のIKEv2 SAが確立済みであることを確認。
+
 ### 2. Tunnel Ping (Bidirectional)
 
 ```
@@ -219,6 +222,8 @@ admin@PA-VM1> ping source 10.255.2.1 host 10.255.2.2    → 0% loss, ~70ms
 admin@PA-VM2> ping source 10.254.1.2 host 10.254.1.1    → 0% loss, ~12ms
 admin@PA-VM2> ping source 10.255.2.2 host 10.255.2.1    → 0% loss, ~97ms
 ```
+
+→ 双方向ping疎通を確認。MPLS経由は約10ms、SASE経由は約70-100msでレイテンシ差7-10倍。
 
 ### 3. BGP Peer Status (All Established)
 
@@ -229,6 +234,8 @@ admin@PA-VM1> show routing protocol bgp summary
   peer PA-VM2-MPLS:   AS 65200, Established   ← Over tunnel.1
   peer PA-VM2-SASE:   AS 65200, Established   ← Over tunnel.2
 ```
+
+→ CE、POP、VPN-MPLS、VPN-SASEの全4ピアがEstablished状態であることを確認。
 
 ### 4. BGP Local-Preference Verification
 
@@ -245,6 +252,8 @@ admin@PA-VM2> show routing protocol bgp loc-rib
   192.168.1.0/24     10.255.2.1    PA-VM1-SASE     100      ← Backup (SASE)
 ```
 
+→ 同一プレフィックスに対しMPLS（LocPrf 200）がBest、SASE（LocPrf 100）がBackupとして正しく選択されていることを確認。
+
 ### 5. Export Policy (Clean CE BGP Table)
 
 After applying export policy and clearing CE BGP, overlay routes no longer appear on CE2:
@@ -259,6 +268,8 @@ CE2# show ip bgp
 ```
 
 > No routes from PA-VM2 (AS 65200) visible — export policy successfully prevents overlay route leakage.
+
+→ CE2のBGPテーブルにPA-VM2（AS 65200）からの経路が存在しないことを確認。Export Policyによるオーバーレイ経路の漏洩防止が正常に機能。
 
 **【日本語サマリ】**<br>
 IPSec SA確立 → トンネルping疎通 → 全BGPピアEstablished →<br>
