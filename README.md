@@ -79,7 +79,7 @@ FGが自動処理していたunderlay/overlay分離を明示的に設定し、�
 **【日本語サマリ】**<br>
 MPLS L3VPNとCloudflare SASE（WireGuard）の2経路構成。<br>
 PA-VM1/VM2間にIPSecトンネルを2本張り、BGPで経路交換。<br>
-MPLS経由は~10ms、SASE経由は~100msとレイテンシ差7-10倍。
+MPLS経由は10ms、SASE経由は100msとレイテンシ差7-10倍。
 
 ---
 
