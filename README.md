@@ -132,7 +132,7 @@ BGP peer PA-VM2-MPLS goes down → route withdrawn
 **【日本語サマリ】**<br>
 FGのSD-WANはunderlay/overlay/ループ防止を1つのエンジンで自動処理します。<br>
 PA-VMでは3層を個別に設定します: underlay static route、IPSecトンネル、overlay BGP。<br>
-マルチベンダー設計では、この分離構造の理解が大事だと考えました。
+この分離構造を理解していることがマルチベンダー設計の鍵です。
 
 ---
 
