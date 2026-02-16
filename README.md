@@ -16,14 +16,13 @@ This lab replaces FortiGate SD-WAN appliances with Palo Alto PA-VM (PAN-OS 10.1.
 * **App-ID Firewall Policy** – Application-aware security on VPN intrazone traffic
 
 **【日本語サマリ】**<br>
-FortiGate SD-WANをPalo Alto PA-VMに置き換え、IPSec VPN + BGP over IPSecを手動構築。<br>
-MPLS優先/SASEフェイルオーバーをlocal-preferenceで制御。<br>
+FortiGate SD-WANをPalo Alto PA-VMに置き換え、IPSec VPN + BGP over IPSecを手動構築しました。<br>
+MPLS優先/SASEフェイルオーバーをlocal-preferenceで制御しています。<br>
 FGが自動処理していたunderlay/overlay分離を明示的に設定し、設計思想の違いを検証しました。
 
 > **Note:** PA-VM is an NGFW, not an SD-WAN appliance. Failover is triggered only by BGP peer down (link failure / blackout). Unlike FortiGate SD-WAN, which monitors SLA metrics (latency, jitter, packet loss) and triggers failover on quality degradation (brownout), PA-VM cannot detect path quality changes while the link remains up.
 
-> **【補足】** PA-VMはNGFWであり、SD-WANではない。フェイルオーバーはBGPピアダウン（回線断 / blackout）でのみ発生する。FortiGate SD-WANのようにSLAメトリクス（レイテンシ・ジッター・パケットロス）を監視して品質劣化（brownout）で切り替える機能はない。回線が生きている限り、品質が劣化してもパス切替は起きない。
-
+> **【補足】** PA-VMはNGFWであり、SD-WANではありません。フェイルオーバーはBGPピアダウン（回線断 / blackout）でのみ発生します。FortiGate SD-WANのようにSLAメトリクス（レイテンシ・ジッター・パケットロス）を監視して品質劣化（brownout）で切り替える機能はありません。回線が生きている限り、品質が劣化してもパス切替は起きません。
 
 ---
 
@@ -82,9 +81,9 @@ FGが自動処理していたunderlay/overlay分離を明示的に設定し、�
 | SASE-VPN (tunnel.2) | ~80-100ms | Internet/WireGuard path |
 
 **【日本語サマリ】**<br>
-MPLS L3VPNとCloudflare SASE（WireGuard）の2経路構成。<br>
-PA-VM1/VM2間にIPSecトンネルを2本張り、BGPで経路交換。<br>
-MPLS経由は10ms、SASE経由は100msとレイテンシ差7-10倍。
+MPLS L3VPNとCloudflare SASE（WireGuard）の2経路構成です。<br>
+PA-VM1/VM2間にIPSecトンネルを2本張り、BGPで経路交換しています。<br>
+MPLS経由は約10ms、SASE経由は約100msとレイテンシ差は7-10倍です。
 
 ---
 
@@ -131,9 +130,9 @@ BGP peer PA-VM2-MPLS goes down → route withdrawn
 ```
 
 **【日本語サマリ】**<br>
-FGのSD-WANはunderlay/overlay/ループ防止を1つのエンジンで自動処理。<br>
-PA-VMでは3層を個別に設定: underlay static route、IPSecトンネル、overlay BGP。<br>
-この分離構造を理解していることがマルチベンダー設計の鍵。
+FGのSD-WANはunderlay/overlay/ループ防止を1つのエンジンで自動処理します。<br>
+PA-VMでは3層を個別に設定します: underlay static route、IPSecトンネル、overlay BGP。<br>
+マルチベンダー設計では、この分離構造の理解が大事だと考えました。
 
 ---
 
@@ -196,12 +195,11 @@ Both tunnels use identical crypto parameters with IKEv2:
 > The VPN-Intrazone rule uses App-ID to restrict tunnel-internal traffic to BGP and ping only, demonstrating Palo Alto's application-aware firewall capability.
 
 **【日本語サマリ】**<br>
-IPSec: IKEv2/AES-256/SHA256/DH14の2トンネル構成。<br>
-BGP: Import PolicyでMPLS優先(LocPrf 200)、Export PolicyでVPN経路のunderlay漏洩防止。<br>
-FW: VPN Intrazone にApp-ID適用（bgp + pingのみ許可）。
+IPSec: IKEv2/AES-256/SHA256/DH14の2トンネル構成です。<br>
+BGP: Import PolicyでMPLS優先(LocPrf 200)、Export PolicyでVPN経路のunderlay漏洩を防止しています。<br>
+FW: VPN Intrazone にApp-IDを適用し、bgp + pingのみ許可しています。
 
 ---
-
 
 ## ✅ Verification Results
 
@@ -278,7 +276,7 @@ CE2# show ip bgp
 
 **【日本語サマリ】**<br>
 IPSec SA確立 → トンネルping疎通 → 全BGPピアEstablished →<br>
-LocPrf 200/100でMPLS優先動作確認 → Export PolicyでCEへのルート漏洩防止確認。
+LocPrf 200/100でMPLS優先動作を確認 → Export PolicyでCEへのルート漏洩防止を確認しました。
 
 ---
 
@@ -293,8 +291,8 @@ LocPrf 200/100でMPLS優先動作確認 → Export PolicyでCEへのルート漏
 | **Fix** | `test vpn ike-sa gateway MPLS-VPN-GW` to manually trigger; resolved permanently after BGP config |
 
 **【日本語サマリ】**<br>
-IKE SAが自動確立しない。PAN-OSのIPSecはオンデマンド方式のため、トンネルを通るトラフィックがないとSAが張られない。<br>
-手動テストで一時的に解決し、BGP設定後に恒久解決。
+IKE SAが自動確立しませんでした。PAN-OSのIPSecはオンデマンド方式のため、トンネルを通るトラフィックがないとSAが張られません。<br>
+手動テストで一時的に解決し、BGP設定後に恒久解決しました。
 
 ---
 
@@ -308,9 +306,9 @@ IKE SAが自動確立しない。PAN-OSのIPSecはオンデマンド方式のた
 | **Contrast** | FortiGate: `set allowaccess ping` on physical IF covers tunnels too; PA-VM requires per-interface config |
 
 **【日本語サマリ】**<br>
-IPSec SA確立済み・ESP通信ありにもかかわらず、トンネルIPへのpingが100%ロス。<br>
-PA-VMではインターフェースごとにmanagement-profileでpingを明示許可する必要がある。<br>
-FortiGateは物理IFの設定がトンネルにも適用されるが、PA-VMはインターフェース個別設定が必須。
+IPSec SA確立済み・ESP通信ありにもかかわらず、トンネルIPへのpingが100%ロスでした。<br>
+PA-VMではインターフェースごとにmanagement-profileでpingを明示許可する必要があります。<br>
+FortiGateは物理IFの設定がトンネルにも適用されますが、PA-VMはインターフェース個別設定が必須です。
 
 ---
 
@@ -324,10 +322,10 @@ FortiGateは物理IFの設定がトンネルにも適用されるが、PA-VMは�
 | **Lesson** | IPSec underlay must be pinned with static routes; BGP can override ESP delivery path |
 
 **【日本語サマリ】**<br>
-MPLS-VPNは正常だがSASE-VPNが失敗。ESPパケットがSASE経路ではなくMPLS経路で送出されていた。<br>
-原因はBGPが10.0.1.0/24をCE→MPLS経由で学習し、直接のSASEパスより優先されたため。<br>
-Static RouteでESP配送経路を固定して解決。<br>
-教訓：IPSecのunderlay経路はStatic Routeで固定すべき。BGPがESP配送パスを上書きする可能性がある。
+MPLS-VPNは正常でしたがSASE-VPNが失敗しました。ESPパケットがSASE経路ではなくMPLS経路で送出されていました。<br>
+原因はBGPが10.0.1.0/24をCE→MPLS経由で学習し、直接のSASEパスより優先されたためです。<br>
+Static RouteでESP配送経路を固定して解決しました。<br>
+教訓：IPSecのunderlay経路はStatic Routeで固定すべきです。BGPがESP配送パスを上書きする可能性があります。
 
 ---
 
@@ -340,9 +338,9 @@ Static RouteでESP配送経路を固定して解決。<br>
 | **Fix** | `wg-quick up wg0` on both POP1 and POP2 |
 
 **【日本語サマリ】**<br>
-POP1からPA-VM2へ到達不能。`wg show`が空を返す。<br>
-EVE-NG再起動後にWireGuardサービスが起動していなかった。<br>
-`wg-quick up wg0`で両POP上のWireGuardを起動して解決。
+POP1からPA-VM2へ到達不能でした。`wg show`が空を返しました。<br>
+EVE-NG再起動後にWireGuardサービスが起動していませんでした。<br>
+`wg-quick up wg0`で両POP上のWireGuardを起動して解決しました。
 
 ---
 
@@ -355,9 +353,9 @@ EVE-NG再起動後にWireGuardサービスが起動していなかった。<br>
 | **Fix** | Ping from both directions to activate SA bidirectionally |
 
 **【日本語サマリ】**<br>
-PA-VM2→PA-VM1のpingは成功するが、逆方向は失敗。ワイヤ上ではESPが双方向に流れている。<br>
-Rekey後のSAアクティベーションのタイミング問題で、レスポンダ側が完全に初期化されていなかった。<br>
-双方向からpingを打つことでSAが双方向アクティブになり解決。
+PA-VM2→PA-VM1のpingは成功しますが、逆方向は失敗しました。ワイヤ上ではESPが双方向に流れています。<br>
+Rekey後のSAアクティベーションのタイミング問題で、レスポンダ側が完全に初期化されていませんでした。<br>
+双方向からpingを打つことでSAが双方向アクティブになり解決しました。
 
 ---
 
@@ -371,10 +369,10 @@ Rekey後のSAアクティベーションのタイミング問題で、レスポ�
 | **Lesson** | Overlay BGP must never override underlay ESP destination routes; static pinning is mandatory |
 
 **【日本語サマリ】**<br>
-MPLS-VPNのpingが失敗し、`flow_tunnel_encap_nested`カウンタが増加。<br>
-原因：BGPオーバーレイ経路が10.200.2.0/24（MPLS-VPNのESP宛先）をSASEトンネル経由に誘導し、トンネル内トンネル（ネスト）が発生。<br>
-Static Routeで10.200.2.0/24をe1/1（CE経由）に固定して解決。<br>
-教訓：オーバーレイBGPがアンダーレイESP宛先経路を上書きしてはならない。Static固定が必須。
+MPLS-VPNのpingが失敗し、`flow_tunnel_encap_nested`カウンタが増加しました。<br>
+原因：BGPオーバーレイ経路が10.200.2.0/24（MPLS-VPNのESP宛先）をSASEトンネル経由に誘導し、トンネル内トンネル（ネスト）が発生しました。<br>
+Static Routeで10.200.2.0/24をe1/1（CE経由）に固定して解決しました。<br>
+教訓：オーバーレイBGPがアンダーレイESP宛先経路を上書きしてはなりません。Static固定が必須です。
 
 ---
 
@@ -388,11 +386,11 @@ Static Routeで10.200.2.0/24をe1/1（CE経由）に固定して解決。<br>
 | **Lesson** | Without export policy, overlay routes leak into underlay and create loops. FortiGate handles this implicitly; PA-VM requires explicit configuration |
 
 **【日本語サマリ】**<br>
-PA-VM2→CE1のpingでICMP Redirect + TTL exceededが返り、`flow_fwd_l3_ttl_zero`カウンタが増加。<br>
-原因：PA-VM2がIPSecオーバーレイで学習した経路（10.1.1.0/30等）をCE2にBGPで再広告。<br>
-CE2がMPLS経路よりPA-VM2経由を優先し、ESPパケットがPA-VM2に戻ってループ発生。<br>
-BGP Export Policyで、VPN-MPLS/VPN-SASEの経路をCE/POP peer-groupに広告しないよう拒否して解決。<br>
-教訓：Export Policyがないとオーバーレイ経路がアンダーレイに漏洩しループが発生する。FortiGateはSD-WANエンジンで暗黙的に処理するが、PA-VMでは明示的な設定が必須。
+PA-VM2→CE1のpingでICMP Redirect + TTL exceededが返り、`flow_fwd_l3_ttl_zero`カウンタが増加しました。<br>
+原因：PA-VM2がIPSecオーバーレイで学習した経路（10.1.1.0/30等）をCE2にBGPで再広告しました。<br>
+CE2がMPLS経路よりPA-VM2経由を優先し、ESPパケットがPA-VM2に戻ってループが発生しました。<br>
+BGP Export Policyで、VPN-MPLS/VPN-SASEの経路をCE/POP peer-groupに広告しないよう拒否して解決しました。<br>
+教訓：Export Policyがないとオーバーレイ経路がアンダーレイに漏洩しループが発生します。FortiGateはSD-WANエンジンで暗黙的に処理しますが、PA-VMでは明示的な設定が必須です。
 
 ---
 
@@ -406,9 +404,9 @@ BGP Export Policyで、VPN-MPLS/VPN-SASEの経路をCE/POP peer-groupに広告�
 | **Lesson** | Production PA-VM uses WebGUI/Panorama/XML API; CLI hierarchical mode is essential for lab work |
 
 **【日本語サマリ】**<br>
-EVE-NGコンソール/SSH上で長い`set`コマンドが途中で切れる。ターミナル幅の制限が原因。<br>
-`edit`/`top`による階層モードでコマンドを短く分割して解決。<br>
-本番環境ではWebGUI/Panorama/XML APIを使用するが、ラボではCLI階層モードが必須。
+EVE-NGコンソール/SSH上で長い`set`コマンドが途中で切れました。ターミナル幅の制限が原因です。<br>
+`edit`/`top`による階層モードでコマンドを短く分割して解決しました。<br>
+本番環境ではWebGUI/Panorama/XML APIを使用しますが、ラボではCLI階層モードが必須です。
 
 ---
 
@@ -421,9 +419,9 @@ EVE-NGコンソール/SSH上で長い`set`コマンドが途中で切れる。�
 | **Fix** | Add destination to incomplete object, or `delete` and recreate |
 
 **【日本語サマリ】**<br>
-Commit時に「static-routeにdestinationがない」というValidation Error。<br>
-`edit`コマンドでオブジェクトは即座に作成されるが、必須パラメータ（destination）を設定する前にcommitしたのが原因。<br>
-不完全なオブジェクトにdestinationを追加するか、`delete`して再作成で解決。
+Commit時に「static-routeにdestinationがない」というValidation Errorが発生しました。<br>
+`edit`コマンドでオブジェクトは即座に作成されますが、必須パラメータ（destination）を設定する前にcommitしたのが原因です。<br>
+不完全なオブジェクトにdestinationを追加するか、`delete`して再作成で解決しました。
 
 ---
 
@@ -436,9 +434,9 @@ Commit時に「static-routeにdestinationがない」というValidation Error�
 | **Fix** | Enable `soft-reset-with-stored-info` on peer-group; commit triggers BGP flap which re-applies policy |
 
 **【日本語サマリ】**<br>
-Import PolicyでLocal-Preference 200を設定したにもかかわらず、全経路がLocPrf 100のまま。<br>
-既存BGPセッションはポリシー追加時に経路を再評価しないのが原因。<br>
-peer-groupに`soft-reset-with-stored-info`を有効化し、commitでBGPフラップが発生して再評価が走り、ポリシーが適用された。
+Import PolicyでLocal-Preference 200を設定したにもかかわらず、全経路がLocPrf 100のままでした。<br>
+既存BGPセッションはポリシー追加時に経路を再評価しないのが原因です。<br>
+peer-groupに`soft-reset-with-stored-info`を有効化し、commitでBGPフラップが発生して再評価が走り、ポリシーが適用されました。
 
 ---
 
@@ -472,7 +470,7 @@ After deployment, verify in this order. Each step depends on the previous one su
 ```
 
 **【日本語サマリ】**<br>
-WireGuard起動確認→MPLS underlay→IPSec SA→Tunnel ping→BGP→LocPrf→Export Policyの順で検証。
+WireGuard起動確認→MPLS underlay→IPSec SA→Tunnel ping→BGP→LocPrf→Export Policyの順で検証しました。
 
 ---
 
@@ -503,10 +501,10 @@ WireGuard起動確認→MPLS underlay→IPSec SA→Tunnel ping→BGP→LocPrf→
 4. **Multi-Vendor Experience Reveals Hidden Assumptions.** Each vendor makes different assumptions about what should be automatic vs explicit. FortiGate automates underlay routing; Viptela centralizes it via vSmart/OMP; PA-VM leaves it entirely to the operator. Knowing all three approaches enables vendor-neutral network design.
 
 **【日本語サマリ】**<br>
-1. Underlay/Overlay分離が最重要設計ポイント。FGは暗黙的、PA-VMは明示的。<br>
-2. PA-VMは「明示的に許可しないものは全て拒否」が徹底されている。<br>
-3. BGP over IPSec構成ではexport policyが必須。なければルーティングループ発生。<br>
-4. マルチベンダー経験により、各社の暗黙の前提が見えるようになる。
+1. Underlay/Overlay分離が最重要設計ポイントです。FGは暗黙的、PA-VMは明示的です。<br>
+2. PA-VMは「明示的に許可しないものは全て拒否」が徹底されています。<br>
+3. BGP over IPSec構成ではexport policyが必須です。なければルーティングループが発生します。<br>
+4. マルチベンダー経験により、各社の暗黙の前提が見えるようになります。
 
 ---
 
