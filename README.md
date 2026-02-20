@@ -5,7 +5,7 @@ explicitly designing IPSec tunnels and BGP overlay routing
 without SD-WAN abstractions — making underlay/overlay separation
 fully visible at the firewall level.
 
-**【日本語】** <br> FortiGate SD-WANをPA-VMに置き換え、IPSec + BGPを手動で設計し、SD-WAN自動化なしでunderlay/overlay分離を可視化するラボを構築しました。
+**【日本語サマリ】** <br> FortiGate SD-WANをPA-VMに置き換え、IPSec + BGPを手動で設計し、SD-WAN自動化なしでunderlay/overlay分離を可視化するラボを構築しました。
 
 ---
 
