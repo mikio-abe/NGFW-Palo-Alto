@@ -85,12 +85,6 @@ FGが自動処理していたunderlay/overlay分離を明示的に設定し、�
 | MPLS-VPN (tunnel.1) | ~10-12ms | Direct PE–PE path |
 | SASE-VPN (tunnel.2) | ~80-100ms | Internet/WireGuard path |
 
-## 📋 Policy Design
-
-- **IPSec:** IKEv2 / AES-256 / SHA-256 / DH14, dual-tunnel configuration
-- **BGP:** Import Policy sets MPLS-preferred path (LocalPref 200); Export Policy prevents VPN routes from leaking into underlay
-- **Security:** App-ID applied to VPN Intrazone — only BGP + ping permitted
-
 
 **【日本語サマリ】**<br>
 MPLS L3VPNとCloudflare SASE（WireGuard）の2経路構成です。<br>
@@ -205,6 +199,12 @@ Both tunnels use identical crypto parameters with IKEv2:
 | Untrust-to-Trust | Untrust | Trust | any | Allow |
 
 > The VPN-Intrazone rule uses App-ID to restrict tunnel-internal traffic to BGP and ping only, demonstrating Palo Alto's application-aware firewall capability.
+
+## 📋 Policy Design
+
+- **IPSec:** IKEv2 / AES-256 / SHA-256 / DH14, dual-tunnel configuration
+- **BGP:** Import Policy sets MPLS-preferred path (LocalPref 200); Export Policy prevents VPN routes from leaking into underlay
+- **Security:** App-ID applied to VPN Intrazone — only BGP + ping permitted
 
 **【日本語サマリ】**<br>
 IPSec: IKEv2/AES-256/SHA256/DH14の2トンネル構成です。<br>
