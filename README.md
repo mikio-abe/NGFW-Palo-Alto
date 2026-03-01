@@ -198,6 +198,8 @@ Both tunnels use identical crypto parameters with IKEv2:
 | Trust-to-Untrust | Trust | Untrust | any | Allow |
 | Untrust-to-Trust | Untrust | Trust | any | Allow |
 
+<img width="2000" alt="image" src="https://github.com/user-attachments/assets/c8df42f9-1bd4-40e8-a852-decae3f8f11e" />
+
 > The VPN-Intrazone rule uses App-ID to restrict tunnel-internal traffic to BGP and ping only, demonstrating Palo Alto's application-aware firewall capability.
 
 ## 📋 Policy Design
