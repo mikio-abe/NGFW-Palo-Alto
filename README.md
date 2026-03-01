@@ -173,12 +173,16 @@ Both tunnels use identical crypto parameters with IKEv2:
 | VPN-MPLS | PA-VM2-MPLS | 65200 | tunnel.1 (10.254.1.1) | Overlay via MPLS |
 | VPN-SASE | PA-VM2-SASE | 65200 | tunnel.2 (10.255.2.1) | Overlay via SASE |
 
+<img width="650" alt="image" src="https://github.com/user-attachments/assets/660c7c8f-5068-4d5e-a35b-f2a8f18f0485" />
+
 ### BGP Import Policy
 
 | Rule | Applied To | Action | Local-Preference |
 |------|-----------|--------|-----------------|
 | MPLS-PREFER | VPN-MPLS | Allow | 200 (Primary) |
 | SASE-BACKUP | VPN-SASE | Allow | 100 (Backup) |
+
+<img width="650" alt="image" src="https://github.com/user-attachments/assets/f51b1100-fcee-4830-a56c-fcb23088518d" />
 
 ### BGP Export Policy (Loop Prevention)
 
@@ -190,6 +194,9 @@ Both tunnels use identical crypto parameters with IKEv2:
 | NO-VPN-TO-POP2 | POP | from-peer VPN-SASE | Deny |
 | ALLOW-REST-CE | CE | 0.0.0.0/0 (any) | Allow |
 | ALLOW-REST-POP | POP | 0.0.0.0/0 (any) | Allow |
+
+<img width="650" alt="image" src="https://github.com/user-attachments/assets/4db2a5a0-edc8-490b-bcd8-c3ad05411f5e" />
+
 
 ### Security Policy (App-ID)
 
