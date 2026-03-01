@@ -200,7 +200,15 @@ Both tunnels use identical crypto parameters with IKEv2:
 
 <img width="2000" alt="image" src="https://github.com/user-attachments/assets/c8df42f9-1bd4-40e8-a852-decae3f8f11e" />
 
+
 > The VPN-Intrazone rule uses App-ID to restrict tunnel-internal traffic to BGP and ping only, demonstrating Palo Alto's application-aware firewall capability.
+> All rules use application-default for the Service column, following Palo Alto Networks' best practice. This restricts each application to its standard ports only (e.g., BGP to tcp/179, ping to ICMP), preventing non-standard port usage. The Service setting was configured via the WebGUI dashboard after establishing SSH port forwarding to the PA-VM management interface.
+
+
+**【日本語サマリ】**<br>
+全ルールのサービスはPalo Alto Networks社の推奨に従い、ダッシュボード（WebGUI）から application-default に設定済みです。<br>
+これにより各アプリケーションは標準ポートでのみ通信が許可され、非標準ポートでの不正利用を防止します。<br>
+（例：BGPはtcp/179、pingはICMPのみ）
 
 ## 📋 Policy Design
 
