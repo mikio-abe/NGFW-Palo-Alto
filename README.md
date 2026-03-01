@@ -159,6 +159,11 @@ Both tunnels use identical crypto parameters with IKEv2:
 | PSK | paloalto123 |
 | Anti-Replay | Enabled |
 
+<img width="2000" alt="image" src="https://github.com/user-attachments/assets/3fe5a86b-b4bf-4b95-8f94-845a09006397" />
+
+<img width="2000" alt="image" src="https://github.com/user-attachments/assets/371195b6-8505-461a-b386-4282920f2c4e" />
+
+
 ### BGP Peer Groups (PA-VM1)
 
 | Peer Group | Peer | Remote AS | Local IF | Purpose |
